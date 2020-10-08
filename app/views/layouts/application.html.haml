@@ -1,0 +1,20 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title People CSV Importer
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  %body
+    - flash.each do |type, msg|
+      - if type === 'warning'
+        %div{style: 'background-color: #FFE699;'}= msg.html_safe
+      - if type === 'error'
+        %div{style: 'background-color: #ff8585;'}= msg.html_safe
+      - if type === 'notice'
+        %div{style: 'background-color: #adffad;'}= msg.html_safe
+    
+       
+    = yield

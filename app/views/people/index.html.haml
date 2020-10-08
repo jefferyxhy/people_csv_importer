@@ -1,0 +1,44 @@
+%h1 People List
+%p Import people from csv or view existing people in database
+
+
+= form_for :people, url: {controller: 'people', action: "batch_create", multipart: true} do |f|
+  = f.file_field :csv
+  = f.submit "Submit", disabled: true, id: "csv-submit-button"
+
+%br
+= simple_form_for @api_control, url: people_path, method: :get do |f|
+  = f.input :q, as: :string, input_html: { value: @api_control.q, id: "keyword-input"}, label: "Search", placeholder: 'please input keyword of name'
+  = f.input :sort_by, as: :hidden, input_html: {value: @api_control.sort_by, id: "sort-by-input"}
+  %br
+
+  %table
+    %thead
+      %tr
+        %th= sortable_column("name", "Name")
+        %th= sortable_column("location_names", "Location")
+        %th= sortable_column("species", "Species")
+        %th= sortable_column("gender", "Gender")
+        %th= sortable_column("affiliation_names", "Affiliations")
+        %th= sortable_column("weapon", "Weapon")
+        %th= sortable_column("vehicle", "Vehicle")
+    %tbody
+      - @people.each do |person|
+        %tr
+          %td= person.name
+          %td= person.location_names
+          %td= person.species
+          %td= person.gender
+          %td= person.affiliation_names
+          %td= person.weapon
+          %td= person.vehicle
+
+- if @people.present?
+  %br 
+  = paginate @people
+  %div= "- total #{@people.total_count} people -"
+- else 
+  %div - No Record Found - 
+
+:javascript
+  Filter.init();
